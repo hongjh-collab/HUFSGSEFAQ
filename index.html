@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>한국외국어대학교 교육대학원 FAQ</title>
+    <style>
+        :root {
+            --primary-color: #003876; /* HUFS Navy */
+            --primary-light: #e0f2fe;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-sub: #64748b;
+            --border-color: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        header h1 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: var(--text-sub);
+            font-size: 0.95rem;
+        }
+
+        /* 검색창 스타일 */
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 14px 20px;
+            font-size: 1rem;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.2s;
+            background-color: var(--card-bg);
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary-color);
+        }
+
+        /* 카테고리 필터 버튼 */
+        .categories {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        .cat-btn {
+            padding: 6px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            background-color: var(--card-bg);
+            color: var(--text-sub);
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .cat-btn.active, .cat-btn:hover {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border-color: var(--primary-color);
+        }
+
+        /* 아코디언 아이템 스타일 */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .faq-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+        }
+
+        .faq-question {
+            width: 100%;
+            padding: 18px 20px;
+            background: none;
+            border: none;
+            text-align: left;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .faq-question:hover {
+            background-color: #f1f5f9;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background-color: var(--primary-light);
+            color: var(--primary-color);
+            margin-right: 8px;
+            font-weight: 500;
+            flex-shrink: 0;
+        }
+
+        .q-text {
+            flex-grow: 1;
+        }
+
+        .icon {
+            font-size: 1.1rem;
+            color: var(--text-sub);
+            transition: transform 0.25s ease;
+            flex-shrink: 0;
+        }
+
+        .faq-item.active .icon {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background-color: #fafaf9;
+            color: #334155;
+            font-size: 0.95rem;
+            padding: 0 20px;
+            border-top: 0 solid var(--border-color);
+            line-height: 1.7;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 600px;
+            padding: 18px 20px;
+            border-top-width: 1px;
+        }
+
+        .faq-answer ul {
+            padding-left: 20px;
+            margin-top: 8px;
+        }
+
+        .faq-answer li {
+            margin-bottom: 4px;
+        }
+
+        .no-result {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-sub);
+            display: none;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 0.85rem;
+            color: var(--text-sub);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>한국외국어대학교 교육대학원 FAQ</h1>
+        <p>신입생 오리엔테이션 자료집 기반 자주 묻는 질문 안내</p>
+    </header>
+
+    <!-- 검색 입력창 -->
+    <div class="search-box">
+        <input type="text" id="searchInput" placeholder="검색어를 입력하세요 (예: 선수과목, 수강신청, 실습, 장학금)...">
+    </div>
+
+    <!-- 카테고리 필터 -->
+    <div class="categories" id="categoryFilter">
+        <button class="cat-btn active" data-category="all">전체</button>
+        <button class="cat-btn" data-category="수강/학점">수강/학점</button>
+        <button class="cat-btn" data-category="교원자격증">교원자격증</button>
+        <button class="cat-btn" data-category="졸업/논문">졸업/논문</button>
+        <button class="cat-btn" data-category="장학/행정">장학/행정</button>
+    </div>
+
+    <!-- FAQ 목록 -->
+    <div class="faq-list" id="faqList">
+        
+        <!-- Q1 -->
+        <div class="faq-item" data-category="수강/학점">
+            <button class="faq-question">
+                <span class="badge">수강/학점</span>
+                <span class="q-text">Q. 선수과목(P)의 의미와 신청 방법은 무엇인가요?</span>
+                <span class="icon">▼</span>
+            </button>
+            <div class="faq-answer">
+                Pass 과목을 의미하며 졸업 평균평점에 반영되지 않고 학점으로 합산되지 않습니다. 교직 12과목 중 한 과목을 선수(P)로 이수할 수 있으며, 교원자격증 취득예정자는 5학기 내 원활한 졸업을 위해 매학기 교직 1과목을 P로 수강신청할 것을 권장합니다.<br> 
+(단, 영어특강 수강 학기에 한하여 선수과목 2과목 신청 가능)
+            </div>
+        </div>
+
+        <!-- Q2 -->
+        <div class="faq-item" data-category="수강/학점">
+            <button class="faq-question">
+                <span class="badge">수강/학점</span>
+                <span class="q-text">Q. 학기별 최대 수강 신청 가능 학점은 어떻게 되나요?</span>
+                <span class="icon">▼</span>
+            </button>
+            <div class="faq-answer">
+                <ul>
+                    <li><strong>1학기:</strong> 전공/교직 최대 3과목(6학점) + 교직 선수(P) 1과목 (총 4과목)</li>
+                    <li><strong>2~4학기:</strong> 전공/교직 최대 4과목(8학점) + 교직 선수(P) 1과목 (총 5과목)</li>
+                    <li><strong>5학기(트랙별상이함):</strong><br> 
+논문트랙: 전공/교직 최대 4과목(8학점) + 교직 선수(P) 1과목 (총 5과목)<br>
+연구보고서트랙: 전공/교직 최대 6과목(12학점) + 교직 선수(P) 1과목 (총 7과목)<br>
+추가학점이수트랙: 전공/교직 최대 7과목(14학점) + 교직 선수(P) 1과목 (총 8과목)<br>
+※ 연구보고서 및 추가학점이수 트랙의 수강신청을 위해서는 학기 시작 후 수강변경 기간 동안 '홈페이지-자료실'의 추가수강신청원을 작성하여 교학처에 제출해야함.<br>
+※ 전공에 따라 전공과목이 7개 이상 개설되지 않는 경우가 많으므로 저 학기생일때 최대한 많은 교육을 이수해야함.
+</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Q3 -->
+        <div class="faq-item" data-category="교원자격증">
+            <button class="faq-question">
+                <span class="badge">교원자격증</span>
+                <span class="q-text">Q. 학부에서 이수한 전공/교직 학점을 인정받으면 교육대학원 졸업학점도 줄어드나요?</span>
+                <span class="icon">▼</span>
+            </button>
+            <div class="faq-answer">
+                <strong>아니요, 줄어들지 않습니다.</strong><br> 학부 전공학점 최대 30학점 인원은 교원자격증 취득을 위한 요건(총 50학점 중 일부 충족)을 위한 것이며, 교육대학원 졸업을 위해서는 논문트랙 기준 전공 20학점(10과목)을 반드시 교육대학원에서 직접 이수해야 합니다.
+            </div>
+        </div>
+
+        <!-- Q4 -->
+        <div class="faq-item" data-category="교원자격증">
+            <button class="faq-question">
+                <span class="badge">교원자격증</span>
+                <span class="q-text">Q. 학교현장실습과 교육봉사활동은 언제, 어떻게 해야 하나요?</span>
+                <span class="icon">▼</span>
+            </button>
+            <div class="faq-answer">
+                <ul>
+                    <li><strong>학교현장실습:</strong> 교육대학원 <strong>3학기 이상 재학생</strong> 중 직전 학기 초에 '학교현장실습승낙서'를 제출하고 해당 학기에 과목을 반드시 수강신청해야 합니다. (대다수 기관이 상반기 학기에 실습을 진행하므로 각 학년도 1학기 수강 권장)</li>
+                    <li><strong>교육봉사활동:</strong> 재학 중 총 60시간 이상 이수해야 하며, 60시간이 완료되는 시점의 학기에 '교육봉사활동' 과목을 반드시 <strong>선수(P)</strong>로 수강신청하고 학기말 지정된 기간 내 일지를 제출해야 합니다.
+<br>※ 교육봉사활동은 <strong>2학기생</strong>부터 신청가능</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Q5 -->
+        <div class="faq-item" data-category="졸업/논문">
+            <button class="faq-question">
+                <span class="badge">졸업/논문</span>
+                <span class="q-text">Q. 학위논문을 쓰지 않고 석사학위를 취득할 수 있나요?</span>
+                <span class="icon">▼</span>
+            </button>
+            <div class="faq-answer">
+                네, 가능합니다. 논문대체제도를 이용하시면 가능합니다. 
+<strong><br>① 연구보고서 트랙</strong>(연구보고서 + 전공 4학점 추가 이수) <strong>
+<br>② 추가학점이수 트랙</strong>(전공 6학점 추가 이수)
+           </div>
+        </div>
+
+        <!-- Q6 -->
+        <div class="faq-item" data-category="장학/행정">
+            <button class="faq-question">
+                <span class="badge">장학/행정</span>
+                <span class="q-text">Q. 현직교사 장학금은 매학기 신청해야 하나요?</span>
+                <span class="icon">▼</span>
+            </button>
+            <div class="faq-answer">
+                네, 그렇습니다. <br>정규직 현직 교사(유아교육전공은 국공립 정규직)의 경우 매학기 정해진 신청 기간(보통 개강 직후)에 재직증명서, 경력증명서, 교원자격증 사본, 장학금신청서를 제출해야 수혜가 가능합니다. 
+<br><strong>※ 기한 내 미제출 시 절대 지급되지 않습니다.</strong>
+            </div>
+        </div>
+
+        <!-- Q7 -->
+        <div class="faq-item" data-category="졸업/논문">
+            <button class="faq-question">
+                <span class="badge">졸업/논문</span>
+                <span class="q-text">Q. 외국어시험과 종합시험은 언제 응시할 수 있나요?</span>
+                <span class="icon">▼</span>
+            </button>
+            <div class="faq-answer">
+                <ul>
+                    <li><strong>외국어시험:</strong> 2학기 이상 등록자 대상 (영어 또는 공인성적으로 대체 가능)</li>
+                    <li><strong>종합시험(교육학):</strong> 12학점 이상 취득하고 3학기 이상 등록자 대상 (1과목)</li>
+                    <li><strong>종합시험(전공 1, 2):</strong> 18학점 이상 취득하고 4학기 이상 등록자 대상 (전공별 지정과목 중 2과목)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Q8 -->
+        <div class="faq-item" data-category="장학/행정">
+            <button class="faq-question">
+                <span class="badge">장학/행정</span>
+                <span class="q-text">Q. 폭력예방교육과 성인지교육은 같은 교육인가요?</span>
+                <span class="icon">▼</span>
+            </button>
+            <div class="faq-answer">
+                아닙니다. <strong>폭력예방교육</strong>은 전 학내 구성원이 매년 이수해야 하는 법정 의무교육(미이수 시 성적열람 제한)이며, <strong>성인지교육</strong>은 교원자격증 취득예정자가 재학 중 2회 이수해야 하는 별도의 필수 과정입니다.
+            </div>
+        </div>
+
+<!-- Q9 -->
+        <div class="faq-item" data-category="졸업/논문">
+            <button class="faq-question">
+                <span class="badge">졸업/논문</span>
+                <span class="q-text">Q. 졸업 시 필수로 이수해야 할 교과목이 정해져 있습니까?</span>
+                <span class="icon">▼</span>
+            </button>
+            <div class="faq-answer">
+                교육학석사 학위만 취득하고자 하면 <strong>졸업학점 26학점(교직 3과목 6학점, 전공 10과목 20학점 - 졸업트랙에 따라 상이함)</strong>을 이수하면 가능합니다. <br>그러나 교원자격증을 취득하고자 교육대학원에 진학한 학생의 경우<strong>교직 12과목(선수과목 포함), 전공기본이수과목(7과목) 및 전공교과교육(3과목)이 포함된 졸업학점 26학점(교직 3과목 6학점, 전공 10과목 20학점 – 졸업트랙에 따라 상이함)</strong>을 이수하여야 합니다.<br>또한, 전공별로 이수해야하는 교과목이 정해지는 경우도 있으니 각 전공대표 선생님께 문의바랍니다.
+            </div>
+        </div>
+
+<!-- Q10 -->
+        <div class="faq-item" data-category="장학/행정">
+            <button class="faq-question">
+                <span class="badge">장학/행정</span>
+                <span class="q-text">Q. 휴학과 복학 신청방법 및 휴학은 몇 학기까지 가능합니까?</span>
+                <span class="icon">▼</span>
+            </button>
+            <div class="faq-answer">
+          일반휴학은 인터넷(<a href="https://wis.hufs.ac.kr/src08/jsp/index.jsp">종합정보시스템</a>)으로 신청하며 휴학기간은 본인이 원하는 대로 1개 학기부터 최장 5년(10학기)까지 가능합니다. (단, 외국인의 경우 비자문제 등으로 교학처에 문의바람)<br> 
+휴학 시 복학 하지 않는 경우 자동으로 5년간 연장되며 5년 경과 후 복학하지 않는 경우, “휴학기간초과제적” 처리되니 주의하시기 바랍니다.
+            </div>
+        </div>
+
+<!-- Q11 -->
+        <div class="faq-item" data-category="장학/행정">
+            <button class="faq-question">
+                <span class="badge">장학/행정</span>
+                <span class="q-text">Q. 성적증명서나 졸업증명서 등 각종 증명서는 어떻게 발급하나요?</span>
+                <span class="icon">▼</span>
+            </button>
+            <div class="faq-answer">
+ <ul>
+         <li>(온라인발급) <a href="https://wis.hufs.ac.kr/src08/jsp/index.jsp">종합정보시스템</a>에 로그인 - 좌측 '인터넷증명서발급' 페이지를 통하여 원하는 증명서 발급</li>
+         <li>(온라인발급) 교육대학원홈페이지 - <a href="https://unc.doculink.co.kr/index/main.do#reload">Online Certificates</a></li>
+         <li>(방문발급) 원스톱서비스센터 <a href="https://www.hufs.ac.kr/campusMap/hufs/view.do?findType=H1#this">위치: 국제학사(학생회관) 1층 109호</a> </li>
+         <li>(방문발급) 국제학사 증명서 출력기 이용 <a href="https://www.hufs.ac.kr/campusMap/hufs/view.do?findType=H1#this">위치: 국제학사(학생회관) 1층</a></li>
+※ 교학처에서는 증명서 발급이 어려우니 해당 페이지를 통하여 발급받으시기 바랍니다.
+            </div>
+        </div>
+
+<!-- Q12 -->
+        <div class="faq-item" data-category="수강/학점">
+            <button class="faq-question">
+                <span class="badge">수강/학점</span>
+                <span class="q-text">Q. 수강신청은 언제, 어떻게하나요?</span>
+                <span class="icon">▼</span>
+            </button>
+            <div class="faq-answer">
+ <ul>
+         <li> 수강신청은 일반적으로 학기 시작 전 2주전에 진행합니다. (※ 구체적인 일정은 홈페이지에 공지함) </li>
+         <li> <a href="https://www.hufs.ac.kr/hufs/index.do">한국외국어대학교 홈페이지</a>에 해당 기간동안 수강신청페이지가 오픈됩니다. </li>
+         <li> <a href="https://gse.hufs.ac.kr/gse/index.do">교육대학원홈페이지</a> - 강의시간표 참조
+<br>※ 강의시간표에서는 지난 학년도/학기에 개설되었던 모든 강의를 조회 가능</li>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="no-result" id="noResult">
+        일치하는 검색 결과가 없습니다. 다른 키워드로 검색해 보세요.
+    </div>
+
+    <footer>
+        &copy; 한국외국어대학교 교육대학원 원우지원. All rights reserved.
+    </footer>
+</div>
+
+<script>
+    const faqItems = document.querySelectorAll('.faq-item');
+    const searchInput = document.getElementById('searchInput');
+    const catButtons = document.querySelectorAll('.cat-btn');
+    const noResult = document.getElementById('noResult');
+
+    let currentCategory = 'all';
+
+    // 1. 아코디언 클릭 이벤트
+    faqItems.forEach(item => {
+        const questionBtn = item.querySelector('.faq-question');
+        questionBtn.addEventListener('click', () => {
+            item.classList.toggle('active');
+        });
+    });
+
+    // 2. 검색 및 카테고리 필터링 함수
+    function filterFAQs() {
+        const keyword = searchInput.value.toLowerCase().trim();
+        let visibleCount = 0;
+
+        faqItems.forEach(item => {
+            const category = item.getAttribute('data-category');
+            const text = item.innerText.toLowerCase();
+
+            const matchesCategory = (currentCategory === 'all' || category === currentCategory);
+            const matchesKeyword = text.includes(keyword);
+
+            if (matchesCategory && matchesKeyword) {
+                item.style.display = 'block';
+                visibleCount++;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        noResult.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+
+    // 3. 검색창 입력 이벤트
+    searchInput.addEventListener('input', filterFAQs);
+
+    // 4. 카테고리 버튼 클릭 이벤트
+    catButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            catButtons.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            currentCategory = btn.getAttribute('data-category');
+            filterFAQs();
+        });
+    });
+</script>
+
+</body>
+</html>
